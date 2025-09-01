@@ -2,14 +2,16 @@ public class Espelho {
 	public static void main(String[] args) {
 		int n1, n2;
 
-		n1 = MyIO.readInt();
-		n2 = MyIO.readInt();
+		while (true) {
+			n1 = MyIO.readInt();
+			n2 = MyIO.readInt();
 
-		inverter(n1, n2);	
+			inverter(n1, n2);
+		}
+
 	}
 
 	public static void inverter(int n1, int n2) {
-		MyIO.println("Entrei no inverter");
 		String first = "", last = "";
 
 		for (int i = n1; i <= n2; i++) {
