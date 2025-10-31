@@ -60,6 +60,59 @@ public class SequentialList {
     currentCell.nextCell = new Cell(game, null);
   }
 
+  public Game removeStart() {
+    if (header.nextCell == null) {
+      System.out.println("A lista está vazia");
+      return null;
+    }
+
+    Cell removeCell = header.nextCell;
+
+    header.nextCell = removeCell.nextCell;
+
+    return removeCell.game;
+  }
+
+  public Game remove(int pos) {
+    if (header.nextCell == null) {
+      System.out.println("A lista está vazia");
+      return null;
+    }
+
+    int i = 0;
+    Cell previousCell = header;
+    Cell currentCell = header.nextCell;
+
+    while (i < pos) {
+      currentCell = currentCell.nextCell;
+      previousCell = previousCell.nextCell;
+      i++;
+    }
+
+    previousCell.nextCell = currentCell.nextCell;
+
+    return currentCell.game;
+  }
+
+  public Game removeEnd() {
+    if (header.nextCell == null) {
+      System.out.println("A lista está vazia");
+      return null;
+    }
+
+    Cell currentCell = header.nextCell;
+    Cell previousCell = header;
+
+    while (currentCell.nextCell != null) {
+      currentCell = currentCell.nextCell;
+      previousCell = previousCell.nextCell;
+    }
+
+    previousCell.nextCell = null;
+
+    return currentCell.game;
+  }
+
   public void show() {
     if (header.nextCell == null) {
       System.out.println("A lista está vazia");
@@ -67,8 +120,10 @@ public class SequentialList {
     }
 
     Cell currentCell = header.nextCell;
+    int index = 0;
 
     while (currentCell != null) {
+      System.out.print("[" + index++ + "] ");
       currentCell.game.showInfo();
       currentCell = currentCell.nextCell;
     }
@@ -110,14 +165,10 @@ public class SequentialList {
 
       data = splitString(key);
 
-      for (String s : data) {
-        System.out.print(s);
-      }
-
       if (data[0].equals("II")) {
         game = findGame(path, data[1]);
         if (game != null)
-          myGameList.insertEnd(game);
+          myGameList.insertStart(game);
       } else if (data[0].equals("I*")) {
         game = findGame(path, data[2]);
         if (game != null)
@@ -127,11 +178,11 @@ public class SequentialList {
         if (game != null)
           myGameList.insertEnd(game);
       } else if (data[0].equals("RI")) {
-        System.out.println("Remover do Início");
+        System.out.println("(R) " + myGameList.removeStart().name);
       } else if (data[0].equals("R*")) {
-        System.out.println("Remover da posição" + data[1]);
+        System.out.println("(R) " + myGameList.remove(Integer.parseInt(data[1])).name);
       } else if (data[0].equals("RF")) {
-        System.out.println("Remover do Final");
+        System.out.println("(R) " + myGameList.removeEnd().name);
       }
     }
 
@@ -152,17 +203,25 @@ public class SequentialList {
     int index = 0;
 
     String text = "";
+    int key_length = key.length();
 
-    for (int i = 0; i < key.length(); i++) {
-      char c = key.charAt(i);
+    int i = 0;
 
-      if (c == ' ' || i == key.length()) {
+    while (i < key_length) {
+      if (key.charAt(i) == ' ') {
         arr[index++] = text;
         text = "";
+        i++;
         continue;
+      } else if (i == key_length - 1) {
+        text += key.charAt(i);
+        arr[index] = text;
+
+        return arr;
       }
 
-      text += c;
+      text += key.charAt(i);
+      i++;
     }
 
     return arr;
